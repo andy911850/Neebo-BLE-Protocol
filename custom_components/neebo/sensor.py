@@ -10,6 +10,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         NeeboSpO2Sensor(hub, entry.entry_id),
         NeeboTemperatureSensor(hub, entry.entry_id),
         NeeboBatterySensor(hub, entry.entry_id),
+        NeeboActivitySensor(hub, entry.entry_id),
     ])
 
 class NeeboBaseSensor(SensorEntity):
@@ -61,3 +62,23 @@ class NeeboBatterySensor(NeeboBaseSensor):
         self._attr_device_class = SensorDeviceClass.BATTERY
         self._attr_native_unit_of_measurement = PERCENTAGE
         self._attr_state_class = SensorStateClass.MEASUREMENT
+
+class NeeboActivitySensor(NeeboBaseSensor):
+    def __init__(self, hub, entry_id):
+        super().__init__(hub, entry_id, "activity_state", "Activity State")
+        self._attr_icon = "mdi:human-child"
+        
+    @property
+    def state(self):
+        val = self._hub.data.get(self._key)
+        if val is None:
+            return None
+        # Try to map common states, or return raw number
+        if val == 0:
+            return "Asleep"
+        elif val == 1:
+            return "Awake"
+        elif val == 2:
+            return "Active"
+        else:
+            return f"State {val}"
