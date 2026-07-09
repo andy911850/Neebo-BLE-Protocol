@@ -106,6 +106,51 @@ When subscribed, the Neebo streams a 9-byte payload:
 **UUID:** `0000fffe-0000-1000-8000-00805f9b34fb` (Write)
 - Write the current UNIX timestamp (Little Endian UInt32) upon connection to sync the hardware clock.
 
+### Base Station Provisioning (WiFi & MQTT)
+If you want to build your own tool to connect the Base Station (`NC0`) to a custom MQTT server, you must write the following characteristics over Bluetooth:
+- **`0000ffb1`**: WiFi SSID (UTF-8 String)
+- **`0000ffb2`**: WiFi Password (UTF-8 String)
+- **`0000ffc1`**: MQTT Broker IP/Hostname (UTF-8 String)
+- **`0000ffc2`**: MQTT Broker Password (UTF-8 String)
+
+Once these are written, the base station will automatically reboot, connect to your WiFi, and authenticate with your MQTT broker using its Serial Number (e.g. `NC1XXXX`) as the Username.
+
+### Base Station MQTT Payload
+Once connected to WiFi, the base station subscribes and publishes to the MQTT broker. It streams all biometric data in real-time JSON format to the following topic:
+
+**Topic:** `/nbo_charger/v1.0/{SERIAL_NUMBER}/get/advertising`
+
+**Example JSON Payload:**
+```json
+{
+  "battery": 100,
+  "placement": 2,
+  "activity_state": 1,
+  "standby": 0,
+  "vitals": [
+    {
+      "hr": {
+        "value": 76,
+        "state": 0
+      }
+    },
+    {
+      "ox": {
+        "value": 99,
+        "state": 0
+      }
+    },
+    {
+      "temp": {
+        "value": 32.4,
+        "state": 0
+      }
+    }
+  ]
+}
+```
+*Note: If the bracelet goes out of range or disconnects from the base station, the payload will continue to be published but the vital `value`s will change to `0` and `activity_state` will change to `14`.*
+
 ---
 
 ## Legal Disclaimer & Terms of Use
