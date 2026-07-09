@@ -71,4 +71,16 @@ You can control the power state of the Neebo by writing a single byte to this ch
 - `00002a27`: Hardware Revision String
 
 ---
-*This repository is intended for educational purposes and interoperability. It is not affiliated with Daatrics.*
+## Legal Disclaimer & Terms of Use
+
+> [!WARNING]
+> **Not a Medical Device**
+> The hardware, software, and documentation provided in this repository are for educational, research, and hobbyist purposes only. This project is **not** a medical device, nor is it intended to be used for the diagnosis, cure, mitigation, treatment, or prevention of any disease or medical condition (including SIDS). Do not rely on this project or the Neebo hardware for life-saving or medical monitoring.
+
+> [!CAUTION]
+> **No Warranty or Liability**
+> This project is provided "AS IS", without warranty of any kind, express or implied. The authors and contributors of this repository shall not be held liable for any damages, injury, or loss of life arising from the use or misuse of this software or the associated hardware. By using this software, you agree to assume all risks associated with its use.
+
+> [!NOTE]
+> **Trademarks & Affiliation**
+> This repository is not affiliated with, endorsed by, or sponsored by Daatrics Ltd. "Neebo" and related trademarks are the property of their respective owners. This project was created to restore local functionality to abandoned hardware after the manufacturer's cloud services ceased operations.
