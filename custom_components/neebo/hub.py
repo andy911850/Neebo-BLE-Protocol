@@ -16,6 +16,9 @@ class NeeboDevice:
         self.mac = mac_address
         self.client = None
         self._callbacks = []
+        self._loop = asyncio.get_event_loop()
+        self._reconnect_task = None
+        self._should_run = True
         
         self.data = {
             "hr": None,
@@ -32,7 +35,7 @@ class NeeboDevice:
 
     def _fire_callbacks(self):
         for cb in self._callbacks:
-            cb()
+            self._loop.call_soon_threadsafe(cb)
 
     def _notification_handler(self, sender, data):
         uuid = str(sender).lower()
@@ -61,6 +64,13 @@ class NeeboDevice:
                 self._fire_callbacks()
 
     async def connect(self):
+        self._should_run = True
+        success = await self._do_connect()
+        # Start the background task to keep connection alive
+        self._reconnect_task = asyncio.create_task(self._maintain_connection())
+        return success
+
+    async def _do_connect(self):
         self.client = BleakClient(self.mac, disconnected_callback=self._on_disconnect)
         try:
             await self.client.connect()
@@ -73,16 +83,26 @@ class NeeboDevice:
             for char in [CHAR_VITALS, CHAR_BATTERY, CHAR_PLACEMENT, CHAR_ACTIVITY]:
                 await self.client.start_notify(char, self._notification_handler)
                 
+            _LOGGER.info(f"Successfully connected and subscribed to Neebo {self.mac}")
             return True
         except Exception as e:
             _LOGGER.error(f"Error connecting to Neebo: {e}")
             return False
 
     def _on_disconnect(self, client):
-        _LOGGER.warning("Neebo disconnected")
-        # In a real integration, we'd trigger a reconnect loop here
+        _LOGGER.warning("Neebo disconnected. Background task will reconnect...")
+
+    async def _maintain_connection(self):
+        while self._should_run:
+            if not self.client or not self.client.is_connected:
+                _LOGGER.info("Attempting to reconnect to Neebo...")
+                await self._do_connect()
+            await asyncio.sleep(10)
 
     async def disconnect(self):
+        self._should_run = False
+        if self._reconnect_task:
+            self._reconnect_task.cancel()
         if self.client and self.client.is_connected:
             await self.client.disconnect()
 
