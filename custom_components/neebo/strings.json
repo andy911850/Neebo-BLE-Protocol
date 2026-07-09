@@ -27,6 +27,7 @@
         "title": "Base Station Configuration",
         "description": "Enter your network details to write to the base station via Bluetooth.\n\n**IMPORTANT:** You must add the MQTT User shown below to your Mosquitto Add-on configuration!",
         "data": {
+          "serial_number": "Base Station Serial Number (e.g. NC1XXXX)",
           "wifi_ssid": "WiFi SSID",
           "wifi_pass": "WiFi Password",
           "mqtt_addr": "Home Assistant IP Address",
