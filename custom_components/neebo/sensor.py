@@ -80,5 +80,7 @@ class NeeboActivitySensor(NeeboBaseSensor):
             return "Awake"
         elif val == 2:
             return "Active"
+        elif val == 14:
+            return "Disconnected"
         else:
             return f"State {val}"
