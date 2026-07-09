@@ -6,6 +6,21 @@ After Daatrics (the manufacturer) shut down their cloud services, the official m
 
 This documentation allows anyone to connect to their Neebo locally without the cloud and integrate it into smart home systems like Home Assistant.
 
+## Home Assistant Integration (HACS)
+
+This repository includes a **fully-native Home Assistant integration**!
+
+You can add this repository as a Custom Repository in [HACS](https://hacs.xyz/) to install it directly:
+1. Open Home Assistant and go to **HACS**.
+2. Click the three dots in the top right corner and select **Custom repositories**.
+3. Paste `https://github.com/andy911850/Neebo-BLE-Protocol` into the Repository URL field.
+4. Select **Integration** as the Category and click Add.
+5. Search for "Neebo" in HACS, click Download, and restart Home Assistant.
+6. Go to **Settings -> Devices & Services -> Add Integration** and search for "Neebo" to connect your device.
+
+The integration automatically creates sensors for **Heart Rate, SpO2, Temperature, Battery, and Placement**, as well as a switch to toggle **Standby Mode**!
+
+---
 ## Pairing & Connection
 
 **Important:** The Neebo monitor maintains an aggressive connection with the official mobile app if your phone is nearby and Bluetooth is enabled. 
