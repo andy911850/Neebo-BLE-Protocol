@@ -8,15 +8,35 @@ This documentation allows anyone to connect to their Neebo locally without the c
 
 ## Home Assistant Integration (HACS)
 
-This repository includes a **fully-native Home Assistant integration**!
+This repository includes a **fully-native Home Assistant integration** that supports two distinct connection modes:
+1. **Direct Bluetooth:** Connects directly to the Neebo Bracelet via Home Assistant's Bluetooth proxy.
+2. **Base Station (MQTT):** (Recommended) Provisions the official Neebo Base Station to connect to your WiFi and push data to your local MQTT broker seamlessly.
 
-You can add this repository as a Custom Repository in [HACS](https://hacs.xyz/) to install it directly:
+### Installation & Setup
+
 1. Open Home Assistant and go to **HACS**.
 2. Click the three dots in the top right corner and select **Custom repositories**.
 3. Paste `https://github.com/andy911850/Neebo-BLE-Protocol` into the Repository URL field.
 4. Select **Integration** as the Category and click Add.
 5. Search for "Neebo" in HACS, click Download, and restart Home Assistant.
-6. Go to **Settings -> Devices & Services -> Add Integration** and search for "Neebo" to connect your device.
+
+### Option A: Base Station Setup (MQTT)
+If you own the Neebo Base Station, you can use it to massively extend the range of the bracelet (since the base station communicates over WiFi).
+
+**Prerequisite:** You must have the [Mosquitto Broker Add-on](https://github.com/home-assistant/addons/tree/master/mosquitto) installed in Home Assistant.
+1. Look at the sticker on the bottom of your Neebo Base Station. You will see a serial number (e.g., `NC1XXXX`).
+2. Open the Mosquitto Broker Add-on configuration in Home Assistant.
+3. Under the **Logins** section, click **Add**.
+4. Enter your serial number exactly as it appears (e.g. `NC1XXXX`) as the **Username**, and choose a **Password** (e.g. `neebo123`).
+5. Click **Save** at the bottom right, go to the Info tab, and **Restart** the Mosquitto Add-on.
+6. Go to **Settings -> Devices & Services -> Add Integration** and search for "Neebo".
+7. Choose **Base Station (MQTT)** and follow the UI wizard to provision your base station!
+
+### Option B: Direct Bluetooth Setup
+If you do not have a base station, or prefer a direct BLE connection:
+1. Turn **OFF** Bluetooth on any smartphone that was previously paired with the device.
+2. Go to **Settings -> Devices & Services -> Add Integration** and search for "Neebo".
+3. Choose **Direct Bluetooth (Bracelet)** and select your `NB0` device from the list.
 
 The integration automatically creates sensors for **Heart Rate, SpO2, Temperature, Battery, and Placement**, as well as a switch to toggle **Standby Mode**!
 
