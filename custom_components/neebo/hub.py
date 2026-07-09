@@ -149,10 +149,10 @@ class NeeboMqttDevice:
                     self.data["hr"] = payload["vitals"][0]["hr"]["value"]
                     self.data["spo2"] = payload["vitals"][1]["ox"]["value"]
                     
-                    # Convert temperature if provided. BLE is in tenths, so we assume JSON is too based on our mapping, 
-                    # but maybe JSON is already float? No, JSON showed 0. We'll divide by 10 for consistency.
+                    # The JSON payload already provides the correct temperature value (e.g. 32.4)
+                    # We do not need to divide by 10.0 like we do in the raw BLE characteristic!
                     temp_val = payload["vitals"][2]["temp"]["value"]
-                    self.data["temp"] = temp_val / 10.0 if temp_val > 0 else 0
+                    self.data["temp"] = temp_val if temp_val > 0 else 0
                     
                 if "battery" in payload:
                     self.data["battery"] = payload["battery"]
