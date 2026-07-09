@@ -1,0 +1,46 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Neebo Setup",
+        "description": "Choose how you want to connect to Neebo.",
+        "menu_options": {
+          "bluetooth": "Direct Bluetooth (Bracelet)",
+          "base_station": "Base Station (MQTT)"
+        }
+      },
+      "bluetooth": {
+        "title": "Select Neebo Bracelet",
+        "description": "Select your Neebo monitor from the list.",
+        "data": {
+          "address": "Device"
+        }
+      },
+      "base_station": {
+        "title": "Select Neebo Base Station",
+        "description": "Select your Neebo Base Station (must be powered on and nearby).",
+        "data": {
+          "address": "Base Station"
+        }
+      },
+      "base_station_wifi": {
+        "title": "Base Station Configuration",
+        "description": "Enter your network details to write to the base station via Bluetooth.\n\n**IMPORTANT:** You must add the MQTT User shown below to your Mosquitto Add-on configuration!",
+        "data": {
+          "wifi_ssid": "WiFi SSID",
+          "wifi_pass": "WiFi Password",
+          "mqtt_addr": "Home Assistant IP Address",
+          "mqtt_pass": "MQTT Password (for the new Mosquitto user)"
+        }
+      }
+    },
+    "abort": {
+      "no_devices_found": "No Neebo devices found on the network.",
+      "already_configured": "Device is already configured",
+      "connection_failed": "Failed to connect to the base station via Bluetooth."
+    },
+    "error": {
+      "cannot_connect": "Failed to connect, please try again."
+    }
+  }
+}

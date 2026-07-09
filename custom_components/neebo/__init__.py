@@ -1,14 +1,18 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from .const import DOMAIN
-from .hub import NeeboDevice
+from .hub import NeeboDevice, NeeboMqttDevice
 import asyncio
-
 PLATFORMS = ["sensor", "binary_sensor", "switch"]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    mac = entry.data["mac"]
-    hub = NeeboDevice(mac)
+    mode = entry.data.get("mode", "bluetooth")
+    if mode == "mqtt":
+        serial = entry.data["serial_number"]
+        hub = NeeboMqttDevice(hass, serial)
+    else:
+        mac = entry.data["mac"]
+        hub = NeeboDevice(mac)
     
     connected = await hub.connect()
     if not connected:
