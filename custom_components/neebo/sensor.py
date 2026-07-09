@@ -26,7 +26,10 @@ class NeeboBaseSensor(SensorEntity):
 
     @property
     def state(self):
-        return self._hub.data.get(self._key)
+        val = self._hub.data.get(self._key)
+        if val == 0 and self._key in ["hr", "spo2", "temp"]:
+            return None
+        return val
 
     async def async_added_to_hass(self):
         self._hub.register_callback(self.async_write_ha_state)
