@@ -1,0 +1,11 @@
+{
+  "domain": "neebo",
+  "name": "Neebo Monitor",
+  "codeowners": ["@andy911850"],
+  "config_flow": true,
+  "dependencies": ["bluetooth"],
+  "documentation": "https://github.com/andy911850/neebo-ble-protocol",
+  "iot_class": "local_push",
+  "requirements": ["bleak>=0.21.1"],
+  "version": "1.0.0"
+}
