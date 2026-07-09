@@ -1,0 +1,6 @@
+{
+  "name": "Neebo BLE Monitor",
+  "render_readme": true,
+  "iot_class": "Local Push",
+  "homeassistant": "2023.8.0"
+}
