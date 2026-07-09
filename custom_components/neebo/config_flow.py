@@ -4,7 +4,7 @@ from homeassistant.components.bluetooth import (
     async_discovered_service_info,
     async_ble_device_from_address,
 )
-from bleak import BleakClient
+from bleak_retry_connector import BleakClientWithServiceCache, establish_connection
 from .const import DOMAIN
 
 WIFI_NAME_CHAR = "0000ffb1-0000-1000-8000-00805f9b34fb"
@@ -85,7 +85,12 @@ class NeeboConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             ble_device = async_ble_device_from_address(self.hass, self.selected_base_station, connectable=True)
             if ble_device:
                 try:
-                    async with BleakClient(ble_device, timeout=20.0) as client:
+                    client = await establish_connection(
+                        client_class=BleakClientWithServiceCache,
+                        device=ble_device,
+                        name=ble_device.name
+                    )
+                    try:
                         if wifi_ssid:
                             await client.write_gatt_char(WIFI_NAME_CHAR, wifi_ssid.encode('utf-8'))
                         if wifi_pass:
@@ -94,6 +99,9 @@ class NeeboConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             await client.write_gatt_char(MQTT_ADDR_CHAR, mqtt_addr.encode('utf-8'))
                         if mqtt_pass:
                             await client.write_gatt_char(MQTT_PASS_CHAR, mqtt_pass.encode('utf-8'))
+                    finally:
+                        await client.disconnect()
+                            
                             
                     await self.async_set_unique_id(serial_num)
                     self._abort_if_unique_id_configured()

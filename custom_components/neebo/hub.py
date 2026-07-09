@@ -1,7 +1,8 @@
 import asyncio
 import struct
 import time
-from bleak import BleakClient
+from bleak_retry_connector import BleakClientWithServiceCache, establish_connection
+from homeassistant.components.bluetooth import async_ble_device_from_address
 import logging
 
 _LOGGER = logging.getLogger(__name__)
@@ -12,7 +13,8 @@ from .const import (
 )
 
 class NeeboDevice:
-    def __init__(self, mac_address):
+    def __init__(self, hass, mac_address):
+        self.hass = hass
         self.mac = mac_address
         self.client = None
         self._callbacks = []
@@ -61,7 +63,17 @@ class NeeboDevice:
                 self._fire_callbacks()
 
     async def connect(self):
-        self.client = BleakClient(self.mac, disconnected_callback=self._on_disconnect)
+        ble_device = async_ble_device_from_address(self.hass, self.mac, connectable=True)
+        if not ble_device:
+            _LOGGER.error("Neebo BLE device not found by Home Assistant.")
+            return False
+            
+        self.client = await establish_connection(
+            client_class=BleakClientWithServiceCache,
+            device=ble_device,
+            name=ble_device.name,
+            disconnected_callback=self._on_disconnect
+        )
         try:
             await self.client.connect()
             # Sync time to ensure device functions properly

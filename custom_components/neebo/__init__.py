@@ -12,7 +12,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hub = NeeboMqttDevice(hass, serial)
     else:
         mac = entry.data["mac"]
-        hub = NeeboDevice(mac)
+        hub = NeeboDevice(hass, mac)
     
     connected = await hub.connect()
     if not connected:
