@@ -4,6 +4,7 @@
   "codeowners": ["@andy911850"],
   "config_flow": true,
   "dependencies": ["bluetooth"],
+  "after_dependencies": ["mqtt"],
   "documentation": "https://github.com/andy911850/neebo-ble-protocol",
   "iot_class": "local_push",
   "requirements": ["bleak>=0.21.1"],

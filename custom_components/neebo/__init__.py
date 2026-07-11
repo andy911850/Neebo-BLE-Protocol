@@ -1,5 +1,6 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryNotReady
 from .const import DOMAIN
 from .hub import NeeboDevice, NeeboMqttDevice
 import asyncio
@@ -14,9 +15,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         mac = entry.data["mac"]
         hub = NeeboDevice(hass, mac)
     
-    connected = await hub.connect()
+    try:
+        connected = await hub.connect()
+    except Exception as e:
+        raise ConfigEntryNotReady(f"Error connecting to Neebo: {e}")
+
     if not connected:
-        return False
+        raise ConfigEntryNotReady("Unable to connect to Neebo device (may be out of range)")
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = hub
