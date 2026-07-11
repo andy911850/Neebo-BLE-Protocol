@@ -121,6 +121,7 @@ class NeeboMqttDevice:
         self.mac = serial_number  # For compatibility with existing sensors
         self._callbacks = []
         self._unsub = None
+        self._disconnect_timer = None
         
         self.data = {
             "hr": None,
@@ -138,6 +139,11 @@ class NeeboMqttDevice:
     def _fire_callbacks(self):
         for cb in self._callbacks:
             cb()
+
+    def _set_disconnected(self):
+        self.data["activity_state"] = 14
+        self._disconnect_timer = None
+        self._fire_callbacks()
 
     async def connect(self):
         topic = f"/nbo_charger/v1.0/{self.serial}/get/advertising"
@@ -159,7 +165,16 @@ class NeeboMqttDevice:
                 if "placement" in payload:
                     self.data["on_wrist"] = (payload["placement"] == 2)
                 if "activity_state" in payload:
-                    self.data["activity_state"] = payload["activity_state"]
+                    new_state = payload["activity_state"]
+                    if new_state == 14:
+                        if self.data["activity_state"] != 14 and self._disconnect_timer is None:
+                            loop = asyncio.get_running_loop()
+                            self._disconnect_timer = loop.call_later(60, self._set_disconnected)
+                    else:
+                        if self._disconnect_timer:
+                            self._disconnect_timer.cancel()
+                            self._disconnect_timer = None
+                        self.data["activity_state"] = new_state
                 if "standby" in payload:
                     self.data["standby"] = (payload["standby"] == 1)
                     
