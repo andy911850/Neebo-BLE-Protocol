@@ -4,11 +4,17 @@
 
 # Neebo Baby Monitor (Local Rescue Project)
 
+> [!WARNING]
+> **Not a Medical Device**
+> The hardware, software, and documentation provided in this repository are for educational, research, and hobbyist purposes only. This project is **not** a medical device, nor is it intended to be used for the diagnosis, cure, mitigation, treatment, or prevention of any disease or medical condition (including SIDS). Do not rely on this project or the Neebo hardware for life-saving or medical monitoring.
+
 Welcome! If you are here, you are likely a frustrated parent who woke up one day to find that your expensive Neebo baby monitor stopped working because Daatrics (the manufacturer) shut down their cloud servers. 
 
 **Don't throw your Neebo away! The hardware still works perfectly.** 
 
 This project was built by a fellow parent to completely rescue the Neebo ecosystem. We have successfully reverse-engineered the hardware so that it no longer relies on the cloud at all. You can now connect your Neebo directly to [Home Assistant](https://www.home-assistant.io/) (a free, private smart home system) and get all of your baby's vitals—Heart Rate, Oxygen, Temperature, and Sleep tracking—working flawlessly again, entirely locally.
+
+*(Note: The protocol was derived by observing BLE traffic from hardware I own, for the sole purpose of interoperability. Tested against NC-series Base Stations and NB0 Bracelets.)*
 
 ---
 
@@ -49,12 +55,16 @@ If you already have Home Assistant running, the easiest way to install this is t
 #### Option A: Base Station Setup (WiFi)
 *This setup uses your Base Station to extend the range of the bracelet across your entire house.*
 
+> [!WARNING]
+> **Security Posture**
+> Daatrics built this hardware without Bluetooth authentication or encryption. When you provision your Base Station, your Wi-Fi credentials are sent over the air in cleartext. Anyone in Bluetooth range (~30ft) can theoretically intercept the Wi-Fi password or read the biometric stream. **Proceed with this understanding and act accordingly.**
+
 **Prerequisite:** You must have the official [Mosquitto Broker Add-on](https://github.com/home-assistant/addons/tree/master/mosquitto) installed in Home Assistant (Settings -> Add-ons).
 
 1. Pick up your Neebo Base Station and look at the sticker on the bottom. You will see a serial number (for example, `NC1XXXX`).
 2. Go to **Settings -> Add-ons -> Mosquitto broker** and click the **Configuration** tab.
 3. Scroll down to the **Logins** section and click **Add**.
-4. Type your exact serial number (e.g. `NC1XXXX`) as the **Username**, and type `neebo123` as the **Password**.
+4. Type your exact serial number (e.g. `NC1XXXX`) as the **Username**, and type a strong password (e.g. `<ChooseAStrongPassword>`) as the **Password**.
 5. Click **Save** at the bottom right. Then go to the **Info** tab and click **Restart** to apply the new login.
 6. Now, go to **Settings -> Devices & Services -> Add Integration** and search for "Neebo".
 7. Select **Base Station (MQTT)** from the menu.
@@ -162,10 +172,6 @@ Once connected to WiFi, the base station subscribes and publishes to the MQTT br
 ---
 
 ## Legal Disclaimer & Terms of Use
-
-> [!WARNING]
-> **Not a Medical Device**
-> The hardware, software, and documentation provided in this repository are for educational, research, and hobbyist purposes only. This project is **not** a medical device, nor is it intended to be used for the diagnosis, cure, mitigation, treatment, or prevention of any disease or medical condition (including SIDS). Do not rely on this project or the Neebo hardware for life-saving or medical monitoring.
 
 > [!CAUTION]
 > **No Warranty or Liability**
