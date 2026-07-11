@@ -12,6 +12,14 @@ This project was built by a fellow parent to completely rescue the Neebo ecosyst
 
 ---
 
+## 📱 The Neebo Rescue iPhone App
+
+Want a beautiful native dashboard for your iPhone that connects to this Home Assistant integration *and* supports direct Bluetooth Travel Mode when you leave the house? 
+
+We built a custom React Native iOS application! Check out the [Neebo Rescue App repository](https://github.com/andy911850/Neebo-Rescue-App) to download and compile it for your phone.
+
+---
+
 ## Home Assistant Integration
 
 This custom integration is incredibly easy to install and gives you two different ways to connect your Neebo:
