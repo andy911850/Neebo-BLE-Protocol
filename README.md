@@ -12,7 +12,7 @@ Welcome! If you are here, you are likely a frustrated parent who woke up one day
 
 **Don't throw your Neebo away! The hardware still works perfectly.** 
 
-This project was built by a fellow parent to completely rescue the Neebo ecosystem. We have successfully reverse-engineered the hardware so that it no longer relies on the cloud at all. You can now connect your Neebo directly to [Home Assistant](https://www.home-assistant.io/) (a free, private smart home system) and get all of your baby's vitals—Heart Rate, Oxygen, Temperature, and Sleep tracking—working flawlessly again, entirely locally.
+This project was built by a fellow parent to rescue the Neebo ecosystem. We have successfully reverse-engineered the hardware so that it no longer relies on the cloud at all. You can now connect your Neebo directly to [Home Assistant](https://www.home-assistant.io/) (a free, private smart home system) and get your baby's vitals—Heart Rate, Oxygen, Temperature, and Sleep tracking—working reliably again, entirely locally.
 
 *(Note: The protocol was derived by observing BLE traffic from hardware I own, for the sole purpose of interoperability. Tested against NC-series Base Stations and NB0 Bracelets.)*
 
