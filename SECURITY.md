@@ -18,4 +18,4 @@ The custom component codebase itself is completely local and does not phone home
 
 ## Reporting a Vulnerability
 
-If you discover a vulnerability in the Python integration code that could compromise a Home Assistant instance, please report it privately before public disclosure. You can securely report issues by opening a private GitHub Security Advisory on this repository, or by emailing the maintainer directly.
+If you discover a vulnerability in the Python integration code that could compromise a Home Assistant instance, please report it privately before public disclosure. You can securely report issues by opening a private GitHub Security Advisory on this repository.
